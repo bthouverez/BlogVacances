@@ -1,5 +1,5 @@
 <?php
-
+require_once('Article.php');
 
 class DAO_Article {
 
@@ -24,13 +24,34 @@ class DAO_Article {
 	// getAll()
 	// Renvoie une collection de tous les articles
 	public function getAll() {
-
+		$sql = 'SELECT * FROM articles';
+		$data = $this->bdd->query($sql);
+		$articles = [];
+		while($row = $data->fetch()) {
+			$a = new Article;
+			$a->id = $row['id'];
+			$a->title = $row['title'];
+			$a->publish_date = $row['publish_date'];
+			$a->content = $row['content'];
+			$a->image_path = $row['image_path'];
+			$a->user_id = $row['user_id'];
+			$articles[] = $a;
+		}
+		return $articles;
 	}
 
 	// create(Article $article)
 	// Enregistre un nouvel article en BDD
 	public function create(Article $article) {
-
+		$sql = 'INSERT INTO Articles (title, publish_date, content, image_path, user_id) VALUES 
+		(?, NOW(), ?, ?, ?);';
+		$req = $this->bdd->prepare($sql);
+		$req->execute([
+			$article->title,
+			$article->content,
+			$article->image_path,
+			$_SESSION['user_id']
+		]);
 	}
 
 	// update(int $id, Article $article)

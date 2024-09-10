@@ -1,8 +1,10 @@
 <?php
 require_once('model/DAO_User.php');
+require_once('model/DAO_Article.php');
 session_start();
 
-$dao = new DAO_User();
+$daoUser = new DAO_User();
+$daoArticle = new DAO_Article();
 $connexionMessage = '';
 
 // Gestion de la déconnexion
@@ -17,13 +19,31 @@ if(isset($_POST['btnConnect'])) {
 	   isset($_POST['password']) and $_POST['password'] != '') {
 		$u = $_POST['username'];
 		$p = $_POST['password'];
-		$connexionMessage = $dao->connectUser($u, $p);
+		$connexionMessage = $daoUser->connectUser($u, $p);
+	}
+}
+// Gestion de la création d'article
+if(isset($_POST['btnCreate'])) {
+	if(isset($_POST['title']) and $_POST['title'] != '' 
+		and isset($_POST['content']) and $_POST['content'] != ''
+	    // and isset($_POST['image_path']) and $_POST['image_path'] != ''
+	) {
+		$a = new Article;
+		$a->content = $_POST['content'];
+		$a->title = $_POST['title'];
+		$a->image_path = $_POST['image_path'] ?? 'image.png';
+		$daoArticle->create($a);
 	}
 }
 
-if($connexionMessage != 'ok') {
-	echo $connexionMessage;
-	include('view/connect_form.php');
+if($connexionMessage != '') {
+	if($connexionMessage != 'ok') {
+		echo $connexionMessage;
+		include('view/connect_form.php');
+	}
 } else {
+	// Récupérer tous les articles avec la DAO Article
+	$articles = $daoArticle->getAll();
+	include('view/create_article.php');
 	include('view/all_articles.php');
 }
