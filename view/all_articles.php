@@ -4,7 +4,7 @@
 		<h2 class="text-lg font-bold"><?= $a->title?>
 		<small class="font-normal">
 			le <?= date_format(date_create($a->publish_date), 'd/m/Y à H\hi') ?>
-			par <?= $a->user_id ?>
+			par <?= $daoUser->getById($a->user_id)->username ?>
 		</small></h2>  
 
 		<?php if ($a->image_path) { ?>

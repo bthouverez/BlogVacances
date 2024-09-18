@@ -13,7 +13,8 @@
 		<?php if(isset($_SESSION['user_name'])) { ?>
 
 			<p class="text-white text-lg font-bold py-2 ml-12">Bonjour <?= $_SESSION['user_name'] ?>
-	<a class="bg-red-500 py-1 px-4 rounded m-4" href="index.php?deco">Déconnexion</a> </p>
+				<a class="bg-red-500 py-1 px-4 rounded m-4" href="index.php?deco">Déconnexion</a> 
+			</p>
 		<?php } ?>
 
 		<?php if($infoMessage != '' && $infoMessage != 'ok') { ?>

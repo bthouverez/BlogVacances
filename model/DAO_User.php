@@ -1,5 +1,5 @@
 <?php
-
+require_once('User.php');
 
 class DAO_User {
 
@@ -49,5 +49,20 @@ class DAO_User {
 		} else {
 			return "Utilisateur $username inconnu";
 		}
+	}
+
+	// getById(int $id)
+	// Renvoie le DTO de l'article à l'id donné en paramètres
+	public function getById(int $id) {
+		$sql = 'SELECT * FROM users WHERE id = ?';
+		$req = $this->bdd->prepare($sql);
+		$req->execute([$id]);
+		$row = $req->fetch();
+		$u = new User;
+		$u->id = $row['id'];
+		$u->username = $row['username'];
+		$u->last_connection = $row['last_connection'];
+		return $u;
+
 	}
 }
